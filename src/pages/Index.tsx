@@ -1,11 +1,33 @@
+
 import React, { useState } from 'react';
-import { Car, Calendar, Fuel, Settings, Gauge } from 'lucide-react';
+import { Car, Calendar, Fuel, Settings, Gauge, Engine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+
+// Car brands and their popular models
+const carBrands = {
+  'Toyota': ['Camry', 'Corolla', 'RAV4', 'Prius', 'Highlander', 'Sienna', 'Tacoma', 'Tundra'],
+  'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey', 'Fit', 'HR-V', 'Ridgeline'],
+  'Ford': ['F-150', 'Escape', 'Explorer', 'Mustang', 'Focus', 'Fusion', 'Edge', 'Expedition'],
+  'Chevrolet': ['Silverado', 'Equinox', 'Malibu', 'Traverse', 'Tahoe', 'Suburban', 'Camaro', 'Corvette'],
+  'BMW': ['3 Series', '5 Series', 'X3', 'X5', 'X1', '7 Series', 'i3', 'i8'],
+  'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'GLC', 'GLE', 'A-Class', 'CLA', 'G-Class'],
+  'Audi': ['A3', 'A4', 'A6', 'Q3', 'Q5', 'Q7', 'A8', 'TT'],
+  'Volkswagen': ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf', 'Beetle', 'Arteon', 'ID.4'],
+  'Nissan': ['Altima', 'Sentra', 'Rogue', 'Murano', 'Pathfinder', 'Titan', 'Leaf', '370Z'],
+  'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Palisade', 'Kona', 'Ioniq', 'Genesis'],
+  'Kia': ['Optima', 'Forte', 'Sorento', 'Sportage', 'Telluride', 'Soul', 'Stinger', 'Niro'],
+  'Mazda': ['Mazda3', 'Mazda6', 'CX-5', 'CX-9', 'MX-5 Miata', 'CX-3', 'CX-30', 'CX-50'],
+  'Subaru': ['Outback', 'Forester', 'Impreza', 'Legacy', 'Ascent', 'Crosstrek', 'WRX', 'BRZ'],
+  'Lexus': ['ES', 'IS', 'GS', 'LS', 'RX', 'GX', 'LX', 'NX'],
+  'Acura': ['TLX', 'ILX', 'RDX', 'MDX', 'NSX', 'TSX', 'RSX', 'Integra']
+};
 
 const Index = () => {
   const [formData, setFormData] = useState({
@@ -13,9 +35,9 @@ const Index = () => {
     model: '',
     year: '',
     engineVolume: '',
-    fuelType: '',
-    transmissionType: '',
-    kilometers: '',
+    fuelType: [] as string[],
+    transmissionType: [] as string[],
+    kilometers: [0, 300000],
     technicalInspection: 'any'
   });
 
@@ -23,6 +45,15 @@ const Index = () => {
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleMultiSelectChange = (field: string, value: string, checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: checked 
+        ? [...prev[field as keyof typeof prev] as string[], value]
+        : (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
     }));
   };
 
@@ -35,6 +66,8 @@ const Index = () => {
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
+  
+  const availableModels = formData.make ? carBrands[formData.make as keyof typeof carBrands] || [] : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -80,27 +113,41 @@ const Index = () => {
                     <Car className="h-4 w-4" />
                     <span>Make</span>
                   </Label>
-                  <Input
-                    id="make"
-                    placeholder="e.g., Toyota, BMW, Mercedes"
-                    value={formData.make}
-                    onChange={(e) => handleInputChange('make', e.target.value)}
-                    className="h-12 text-lg"
-                    required
-                  />
+                  <Select onValueChange={(value) => {
+                    handleInputChange('make', value);
+                    handleInputChange('model', ''); // Reset model when make changes
+                  }}>
+                    <SelectTrigger className="h-12 text-lg">
+                      <SelectValue placeholder="Select car brand" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white max-h-[300px]">
+                      {Object.keys(carBrands).map((brand) => (
+                        <SelectItem key={brand} value={brand}>
+                          {brand}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="model" className="text-sm font-medium text-gray-700">
                     Model
                   </Label>
-                  <Input
-                    id="model"
-                    placeholder="e.g., Camry, X5, C-Class"
-                    value={formData.model}
-                    onChange={(e) => handleInputChange('model', e.target.value)}
-                    className="h-12 text-lg"
-                    required
-                  />
+                  <Select 
+                    onValueChange={(value) => handleInputChange('model', value)}
+                    disabled={!formData.make}
+                  >
+                    <SelectTrigger className="h-12 text-lg">
+                      <SelectValue placeholder={formData.make ? "Select model" : "Select make first"} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white max-h-[300px]">
+                      {availableModels.map((model) => (
+                        <SelectItem key={model} value={model}>
+                          {model}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -115,7 +162,7 @@ const Index = () => {
                     <SelectTrigger className="h-12 text-lg">
                       <SelectValue placeholder="Select year" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent className="bg-white max-h-[300px]">
                       {years.map((year) => (
                         <SelectItem key={year} value={year.toString()}>
                           {year}
@@ -125,8 +172,9 @@ const Index = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="engineVolume" className="text-sm font-medium text-gray-700">
-                    Engine Volume (L)
+                  <Label htmlFor="engineVolume" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                    <Engine className="h-4 w-4" />
+                    <span>Engine Volume (L)</span>
                   </Label>
                   <Input
                     id="engineVolume"
@@ -141,62 +189,65 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Third Row - Fuel Type and Transmission */}
+              {/* Third Row - Fuel Type and Transmission (Multi-select) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="fuelType" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
                     <Fuel className="h-4 w-4" />
                     <span>Fuel Type</span>
                   </Label>
-                  <Select onValueChange={(value) => handleInputChange('fuelType', value)}>
-                    <SelectTrigger className="h-12 text-lg">
-                      <SelectValue placeholder="Select fuel type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="gasoline">Gasoline</SelectItem>
-                      <SelectItem value="diesel">Diesel</SelectItem>
-                      <SelectItem value="hybrid">Hybrid</SelectItem>
-                      <SelectItem value="electric">Electric</SelectItem>
-                      <SelectItem value="lpg">LPG</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="h-12 text-lg w-full justify-between">
+                        {formData.fuelType.length > 0 
+                          ? `${formData.fuelType.length} selected`
+                          : "Select fuel types"
+                        }
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-white">
+                      {['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((fuel) => (
+                        <DropdownMenuCheckboxItem
+                          key={fuel}
+                          checked={formData.fuelType.includes(fuel)}
+                          onCheckedChange={(checked) => handleMultiSelectChange('fuelType', fuel, checked)}
+                        >
+                          {fuel}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="transmission" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
                     <Settings className="h-4 w-4" />
                     <span>Transmission Type</span>
                   </Label>
-                  <Select onValueChange={(value) => handleInputChange('transmissionType', value)}>
-                    <SelectTrigger className="h-12 text-lg">
-                      <SelectValue placeholder="Select transmission" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="manual">Manual</SelectItem>
-                      <SelectItem value="automatic">Automatic</SelectItem>
-                      <SelectItem value="cvt">CVT</SelectItem>
-                      <SelectItem value="semi-automatic">Semi-Automatic</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="h-12 text-lg w-full justify-between">
+                        {formData.transmissionType.length > 0 
+                          ? `${formData.transmissionType.length} selected`
+                          : "Select transmission types"
+                        }
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-white">
+                      {['Manual', 'Automatic', 'CVT', 'Semi-Automatic'].map((transmission) => (
+                        <DropdownMenuCheckboxItem
+                          key={transmission}
+                          checked={formData.transmissionType.includes(transmission)}
+                          onCheckedChange={(checked) => handleMultiSelectChange('transmissionType', transmission, checked)}
+                        >
+                          {transmission}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
 
-              {/* Fourth Row - Kilometers */}
-              <div className="space-y-2">
-                <Label htmlFor="kilometers" className="text-sm font-medium text-gray-700">
-                  Kilometers Driven
-                </Label>
-                <Input
-                  id="kilometers"
-                  placeholder="e.g., 120000"
-                  value={formData.kilometers}
-                  onChange={(e) => handleInputChange('kilometers', e.target.value)}
-                  className="h-12 text-lg"
-                  type="number"
-                  required
-                />
-              </div>
-
-              {/* Fifth Row - Technical Inspection */}
+              {/* Fourth Row - Technical Inspection */}
               <div className="space-y-4">
                 <Label className="text-sm font-medium text-gray-700">
                   Yearly Technical Inspection Passed
@@ -219,6 +270,28 @@ const Index = () => {
                     <Label htmlFor="no" className="cursor-pointer">No</Label>
                   </div>
                 </RadioGroup>
+              </div>
+
+              {/* Fifth Row - Kilometers (Slider) */}
+              <div className="space-y-4">
+                <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Gauge className="h-4 w-4" />
+                  <span>Kilometers Driven</span>
+                </Label>
+                <div className="space-y-4">
+                  <Slider
+                    value={formData.kilometers}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, kilometers: value }))}
+                    max={500000}
+                    min={0}
+                    step={5000}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{formData.kilometers[0].toLocaleString()} km</span>
+                    <span>{formData.kilometers[1].toLocaleString()} km</span>
+                  </div>
+                </div>
               </div>
 
               {/* Submit Button */}
