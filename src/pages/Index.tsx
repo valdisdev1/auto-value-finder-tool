@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const Index = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,8 @@ const Index = () => {
     engineVolume: '',
     fuelType: '',
     transmissionType: '',
-    kilometers: ''
+    kilometers: '',
+    technicalInspection: 'any'
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -192,6 +194,31 @@ const Index = () => {
                   type="number"
                   required
                 />
+              </div>
+
+              {/* Fifth Row - Technical Inspection */}
+              <div className="space-y-4">
+                <Label className="text-sm font-medium text-gray-700">
+                  Yearly Technical Inspection Passed
+                </Label>
+                <RadioGroup
+                  value={formData.technicalInspection}
+                  onValueChange={(value) => handleInputChange('technicalInspection', value)}
+                  className="flex space-x-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="any" id="any" />
+                    <Label htmlFor="any" className="cursor-pointer">Any</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="yes" />
+                    <Label htmlFor="yes" className="cursor-pointer">Yes</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="no" />
+                    <Label htmlFor="no" className="cursor-pointer">No</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
               {/* Submit Button */}
