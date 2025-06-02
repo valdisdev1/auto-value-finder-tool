@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Car, Calendar, Fuel, Settings, Gauge, Engine } from 'lucide-react';
+import { Car, Calendar, Fuel, Settings, Gauge } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -173,7 +172,7 @@ const Index = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="engineVolume" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
-                    <Engine className="h-4 w-4" />
+                    <Settings className="h-4 w-4" />
                     <span>Engine Volume (L)</span>
                   </Label>
                   <Input
