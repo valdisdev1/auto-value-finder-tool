@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Car, Calendar, Fuel, Settings, Gauge } from 'lucide-react';
+import { Car, Calendar, Fuel, Settings, Gauge, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,11 +33,13 @@ const Index = () => {
   const [formData, setFormData] = useState({
     make: '',
     model: '',
-    year: '',
+    yearFrom: '',
+    yearTo: '',
     engineVolume: '',
     fuelType: [] as string[],
     transmissionType: [] as string[],
     kilometers: [0, 300000],
+    priceRange: [0, 100000],
     technicalInspection: 'any'
   });
 
@@ -61,7 +63,7 @@ const Index = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Here you would typically send the data to a price checking API
-    alert('Price check submitted! (This is a demo)');
+    alert('Search submitted! (This is a demo)');
   };
 
   const currentYear = new Date().getFullYear();
@@ -76,7 +78,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-3">
             <Car className="h-8 w-8 text-blue-400" />
-            <h1 className="text-2xl font-bold text-slate-100">CarPriceChecker</h1>
+            <h1 className="text-2xl font-bold text-slate-100">Cartrack</h1>
           </div>
         </div>
       </div>
@@ -86,10 +88,10 @@ const Index = () => {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-slate-100 mb-4">
-            Get Your Car's Current Market Value
+            Check the price of desired car
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Enter your vehicle details below to get an accurate price estimate based on current market data
+            We have data from over 50000 listings.
           </p>
         </div>
 
@@ -151,16 +153,16 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Second Row - Year and Engine Volume */}
+              {/* Second Row - Year From and Year To */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="year" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
+                  <Label htmlFor="yearFrom" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Calendar className="h-4 w-4" />
-                    <span>Year</span>
+                    <span>Year From</span>
                   </Label>
-                  <Select onValueChange={(value) => handleInputChange('year', value)}>
+                  <Select onValueChange={(value) => handleInputChange('yearFrom', value)}>
                     <SelectTrigger className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
-                      <SelectValue placeholder="Select year" />
+                      <SelectValue placeholder="Select year from" />
                     </SelectTrigger>
                     <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
                       {years.map((year) => (
@@ -171,6 +173,28 @@ const Index = () => {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="yearTo" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>Year To</span>
+                  </Label>
+                  <Select onValueChange={(value) => handleInputChange('yearTo', value)}>
+                    <SelectTrigger className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                      <SelectValue placeholder="Select year to" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
+                      {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Third Row - Engine Volume */}
+              <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="engineVolume" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Settings className="h-4 w-4" />
@@ -184,12 +208,11 @@ const Index = () => {
                     className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-blue-400"
                     type="number"
                     step="0.1"
-                    required
                   />
                 </div>
               </div>
 
-              {/* Third Row - Fuel Type and Transmission (Multi-select) */}
+              {/* Fourth Row - Fuel Type and Transmission (Multi-select) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
@@ -249,7 +272,29 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Fourth Row - Technical Inspection */}
+              {/* Fifth Row - Price Range */}
+              <div className="space-y-4">
+                <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
+                  <DollarSign className="h-4 w-4" />
+                  <span>Price Range</span>
+                </Label>
+                <div className="space-y-4">
+                  <Slider
+                    value={formData.priceRange}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, priceRange: value }))}
+                    max={200000}
+                    min={0}
+                    step={1000}
+                    className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
+                  />
+                  <div className="flex justify-between text-sm text-slate-300">
+                    <span>${formData.priceRange[0].toLocaleString()}</span>
+                    <span>{formData.priceRange[1] >= 200000 ? 'Unlimited' : `$${formData.priceRange[1].toLocaleString()}`}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sixth Row - Technical Inspection */}
               <div className="space-y-4">
                 <Label className="text-sm font-medium text-slate-200">
                   Yearly Technical Inspection Passed
@@ -274,7 +319,7 @@ const Index = () => {
                 </RadioGroup>
               </div>
 
-              {/* Fifth Row - Kilometers (Slider) */}
+              {/* Seventh Row - Kilometers (Slider) */}
               <div className="space-y-4">
                 <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                   <Gauge className="h-4 w-4" />
@@ -303,7 +348,7 @@ const Index = () => {
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-12 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                 >
-                  Get Price Estimate
+                  Search
                 </Button>
               </div>
             </form>
