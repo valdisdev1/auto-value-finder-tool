@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Car, Calendar, Fuel, Settings, Gauge, DollarSign } from 'lucide-react';
+import { Car, Calendar, Fuel, Gauge, DollarSign, Wrench, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -58,6 +59,26 @@ const Index = () => {
     }));
   };
 
+  const handlePriceRangeInputChange = (index: number, value: string) => {
+    const numValue = parseInt(value) || 0;
+    setFormData(prev => ({
+      ...prev,
+      priceRange: index === 0 
+        ? [Math.min(numValue, prev.priceRange[1]), prev.priceRange[1]]
+        : [prev.priceRange[0], Math.max(numValue, prev.priceRange[0])]
+    }));
+  };
+
+  const handleKilometersInputChange = (index: number, value: string) => {
+    const numValue = parseInt(value) || 0;
+    setFormData(prev => ({
+      ...prev,
+      kilometers: index === 0 
+        ? [Math.min(numValue, prev.kilometers[1]), prev.kilometers[1]]
+        : [prev.kilometers[0], Math.max(numValue, prev.kilometers[0])]
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
@@ -106,7 +127,7 @@ const Index = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 bg-slate-800/95">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* First Row - Make and Model */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -118,10 +139,10 @@ const Index = () => {
                     handleInputChange('make', value);
                     handleInputChange('model', '');
                   }}>
-                    <SelectTrigger className="h-10 text-base bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                    <SelectTrigger className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                       <SelectValue placeholder="Select car brand" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px] z-50">
                       {Object.keys(carBrands).map((brand) => (
                         <SelectItem key={brand} value={brand} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {brand}
@@ -138,10 +159,10 @@ const Index = () => {
                     onValueChange={(value) => handleInputChange('model', value)}
                     disabled={!formData.make}
                   >
-                    <SelectTrigger className="h-10 text-base bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 disabled:opacity-50">
+                    <SelectTrigger className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 disabled:opacity-50">
                       <SelectValue placeholder={formData.make ? "Select model" : "Select make first"} />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px] z-50">
                       {availableModels.map((model) => (
                         <SelectItem key={model} value={model} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {model}
@@ -160,10 +181,10 @@ const Index = () => {
                     <span>Year From</span>
                   </Label>
                   <Select onValueChange={(value) => handleInputChange('yearFrom', value)}>
-                    <SelectTrigger className="h-10 text-base bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                    <SelectTrigger className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                       <SelectValue placeholder="Select year from" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px] z-50">
                       {years.map((year) => (
                         <SelectItem key={year} value={year.toString()} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {year}
@@ -178,10 +199,10 @@ const Index = () => {
                     <span>Year To</span>
                   </Label>
                   <Select onValueChange={(value) => handleInputChange('yearTo', value)}>
-                    <SelectTrigger className="h-10 text-base bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                    <SelectTrigger className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                       <SelectValue placeholder="Select year to" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px] z-50">
                       {years.map((year) => (
                         <SelectItem key={year} value={year.toString()} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {year}
@@ -196,7 +217,7 @@ const Index = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="engineVolume" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
-                    <Settings className="h-4 w-4" />
+                    <Gauge className="h-4 w-4" />
                     <span>Engine Volume (L)</span>
                   </Label>
                   <Input
@@ -204,19 +225,20 @@ const Index = () => {
                     placeholder="e.g., 2.0, 3.5, 1.8"
                     value={formData.engineVolume}
                     onChange={(e) => handleInputChange('engineVolume', e.target.value)}
-                    className="h-10 text-base bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-blue-400"
+                    className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-blue-400"
                     type="number"
                     step="0.1"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-slate-200">
-                    Yearly Technical Inspection Passed
+                  <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
+                    <Wrench className="h-4 w-4" />
+                    <span>Yearly Technical Inspection Passed</span>
                   </Label>
                   <RadioGroup
                     value={formData.technicalInspection}
                     onValueChange={(value) => handleInputChange('technicalInspection', value)}
-                    className="flex space-x-4 pt-2"
+                    className="flex space-x-4 pt-1"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="any" id="any" className="border-slate-500 text-blue-400" />
@@ -243,20 +265,20 @@ const Index = () => {
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-10 text-base w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                         {formData.fuelType.length > 0 
                           ? `${formData.fuelType.length} selected`
                           : "Select fuel types"
                         }
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600">
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
                       {['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((fuel) => (
                         <DropdownMenuCheckboxItem
                           key={fuel}
                           checked={formData.fuelType.includes(fuel)}
                           onCheckedChange={(checked) => handleMultiSelectChange('fuelType', fuel, checked)}
-                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600"
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600 data-[state=checked]:bg-slate-100 data-[state=checked]:text-slate-900"
                         >
                           {fuel}
                         </DropdownMenuCheckboxItem>
@@ -266,25 +288,25 @@ const Index = () => {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
-                    <Settings className="h-4 w-4" />
+                    <GitBranch className="h-4 w-4" />
                     <span>Transmission Type</span>
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-10 text-base w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                         {formData.transmissionType.length > 0 
                           ? `${formData.transmissionType.length} selected`
                           : "Select transmission types"
                         }
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600">
-                      {['Manual', 'Automatic', 'CVT', 'Semi-Automatic'].map((transmission) => (
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                      {['Manual', 'Automatic'].map((transmission) => (
                         <DropdownMenuCheckboxItem
                           key={transmission}
                           checked={formData.transmissionType.includes(transmission)}
                           onCheckedChange={(checked) => handleMultiSelectChange('transmissionType', transmission, checked)}
-                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600"
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600 data-[state=checked]:bg-slate-100 data-[state=checked]:text-slate-900"
                         >
                           {transmission}
                         </DropdownMenuCheckboxItem>
@@ -309,7 +331,31 @@ const Index = () => {
                     step={1000}
                     className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
                   />
-                  <div className="flex justify-between text-sm text-slate-300">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-slate-300 min-w-[30px]">From:</span>
+                      <Input
+                        type="number"
+                        value={formData.priceRange[0]}
+                        onChange={(e) => handlePriceRangeInputChange(0, e.target.value)}
+                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
+                        min={0}
+                        max={200000}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-slate-300 min-w-[20px]">To:</span>
+                      <Input
+                        type="number"
+                        value={formData.priceRange[1]}
+                        onChange={(e) => handlePriceRangeInputChange(1, e.target.value)}
+                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
+                        min={0}
+                        max={200000}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-400">
                     <span>${formData.priceRange[0].toLocaleString()}</span>
                     <span>{formData.priceRange[1] >= 200000 ? 'Unlimited' : `$${formData.priceRange[1].toLocaleString()}`}</span>
                   </div>
@@ -331,7 +377,31 @@ const Index = () => {
                     step={5000}
                     className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
                   />
-                  <div className="flex justify-between text-sm text-slate-300">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-slate-300 min-w-[30px]">From:</span>
+                      <Input
+                        type="number"
+                        value={formData.kilometers[0]}
+                        onChange={(e) => handleKilometersInputChange(0, e.target.value)}
+                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
+                        min={0}
+                        max={500000}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-slate-300 min-w-[20px]">To:</span>
+                      <Input
+                        type="number"
+                        value={formData.kilometers[1]}
+                        onChange={(e) => handleKilometersInputChange(1, e.target.value)}
+                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
+                        min={0}
+                        max={500000}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-400">
                     <span>{formData.kilometers[0].toLocaleString()} km</span>
                     <span>{formData.kilometers[1].toLocaleString()} km</span>
                   </div>
