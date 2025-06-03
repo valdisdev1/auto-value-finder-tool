@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Car, Calendar, Fuel, Settings, Gauge } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -69,13 +70,13 @@ const Index = () => {
   const availableModels = formData.make ? carBrands[formData.make as keyof typeof carBrands] || [] : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-slate-800/90 backdrop-blur-sm shadow-xl border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-3">
-            <Car className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">CarPriceChecker</h1>
+            <Car className="h-8 w-8 text-blue-400" />
+            <h1 className="text-2xl font-bold text-slate-100">CarPriceChecker</h1>
           </div>
         </div>
       </div>
@@ -84,44 +85,44 @@ const Index = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-slate-100 mb-4">
             Get Your Car's Current Market Value
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             Enter your vehicle details below to get an accurate price estimate based on current market data
           </p>
         </div>
 
         {/* Price Checker Form */}
-        <Card className="bg-white shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+        <Card className="bg-slate-800/95 backdrop-blur-sm shadow-2xl border-slate-700 border">
+          <CardHeader className="bg-gradient-to-r from-slate-700 to-slate-600 text-white rounded-t-lg border-b border-slate-600">
             <CardTitle className="text-2xl flex items-center space-x-2">
               <Gauge className="h-6 w-6" />
               <span>Vehicle Information</span>
             </CardTitle>
-            <CardDescription className="text-blue-100">
+            <CardDescription className="text-slate-200">
               Please provide accurate information for the best price estimate
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-8">
+          <CardContent className="p-8 bg-slate-800/95">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* First Row - Make and Model */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="make" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label htmlFor="make" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Car className="h-4 w-4" />
                     <span>Make</span>
                   </Label>
                   <Select onValueChange={(value) => {
                     handleInputChange('make', value);
-                    handleInputChange('model', ''); // Reset model when make changes
+                    handleInputChange('model', '');
                   }}>
-                    <SelectTrigger className="h-12 text-lg">
+                    <SelectTrigger className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                       <SelectValue placeholder="Select car brand" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
                       {Object.keys(carBrands).map((brand) => (
-                        <SelectItem key={brand} value={brand}>
+                        <SelectItem key={brand} value={brand} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {brand}
                         </SelectItem>
                       ))}
@@ -129,19 +130,19 @@ const Index = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="model" className="text-sm font-medium text-gray-700">
+                  <Label htmlFor="model" className="text-sm font-medium text-slate-200">
                     Model
                   </Label>
                   <Select 
                     onValueChange={(value) => handleInputChange('model', value)}
                     disabled={!formData.make}
                   >
-                    <SelectTrigger className="h-12 text-lg">
+                    <SelectTrigger className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 disabled:opacity-50">
                       <SelectValue placeholder={formData.make ? "Select model" : "Select make first"} />
                     </SelectTrigger>
-                    <SelectContent className="bg-white max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
                       {availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
+                        <SelectItem key={model} value={model} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {model}
                         </SelectItem>
                       ))}
@@ -153,17 +154,17 @@ const Index = () => {
               {/* Second Row - Year and Engine Volume */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="year" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label htmlFor="year" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Calendar className="h-4 w-4" />
                     <span>Year</span>
                   </Label>
                   <Select onValueChange={(value) => handleInputChange('year', value)}>
-                    <SelectTrigger className="h-12 text-lg">
+                    <SelectTrigger className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                       <SelectValue placeholder="Select year" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white max-h-[300px]">
+                    <SelectContent className="bg-slate-700 border-slate-600 max-h-[300px]">
                       {years.map((year) => (
-                        <SelectItem key={year} value={year.toString()}>
+                        <SelectItem key={year} value={year.toString()} className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600">
                           {year}
                         </SelectItem>
                       ))}
@@ -171,7 +172,7 @@ const Index = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="engineVolume" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label htmlFor="engineVolume" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Settings className="h-4 w-4" />
                     <span>Engine Volume (L)</span>
                   </Label>
@@ -180,7 +181,7 @@ const Index = () => {
                     placeholder="e.g., 2.0, 3.5, 1.8"
                     value={formData.engineVolume}
                     onChange={(e) => handleInputChange('engineVolume', e.target.value)}
-                    className="h-12 text-lg"
+                    className="h-12 text-lg bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-blue-400"
                     type="number"
                     step="0.1"
                     required
@@ -191,25 +192,26 @@ const Index = () => {
               {/* Third Row - Fuel Type and Transmission (Multi-select) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Fuel className="h-4 w-4" />
                     <span>Fuel Type</span>
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-12 text-lg w-full justify-between">
+                      <Button variant="outline" className="h-12 text-lg w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                         {formData.fuelType.length > 0 
                           ? `${formData.fuelType.length} selected`
                           : "Select fuel types"
                         }
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-white">
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600">
                       {['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((fuel) => (
                         <DropdownMenuCheckboxItem
                           key={fuel}
                           checked={formData.fuelType.includes(fuel)}
                           onCheckedChange={(checked) => handleMultiSelectChange('fuelType', fuel, checked)}
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600"
                         >
                           {fuel}
                         </DropdownMenuCheckboxItem>
@@ -218,25 +220,26 @@ const Index = () => {
                   </DropdownMenu>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Settings className="h-4 w-4" />
                     <span>Transmission Type</span>
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-12 text-lg w-full justify-between">
+                      <Button variant="outline" className="h-12 text-lg w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
                         {formData.transmissionType.length > 0 
                           ? `${formData.transmissionType.length} selected`
                           : "Select transmission types"
                         }
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-white">
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600">
                       {['Manual', 'Automatic', 'CVT', 'Semi-Automatic'].map((transmission) => (
                         <DropdownMenuCheckboxItem
                           key={transmission}
                           checked={formData.transmissionType.includes(transmission)}
                           onCheckedChange={(checked) => handleMultiSelectChange('transmissionType', transmission, checked)}
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600"
                         >
                           {transmission}
                         </DropdownMenuCheckboxItem>
@@ -248,7 +251,7 @@ const Index = () => {
 
               {/* Fourth Row - Technical Inspection */}
               <div className="space-y-4">
-                <Label className="text-sm font-medium text-gray-700">
+                <Label className="text-sm font-medium text-slate-200">
                   Yearly Technical Inspection Passed
                 </Label>
                 <RadioGroup
@@ -257,23 +260,23 @@ const Index = () => {
                   className="flex space-x-6"
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="any" id="any" />
-                    <Label htmlFor="any" className="cursor-pointer">Any</Label>
+                    <RadioGroupItem value="any" id="any" className="border-slate-500 text-blue-400" />
+                    <Label htmlFor="any" className="cursor-pointer text-slate-200">Any</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="yes" />
-                    <Label htmlFor="yes" className="cursor-pointer">Yes</Label>
+                    <RadioGroupItem value="yes" id="yes" className="border-slate-500 text-blue-400" />
+                    <Label htmlFor="yes" className="cursor-pointer text-slate-200">Yes</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="no" />
-                    <Label htmlFor="no" className="cursor-pointer">No</Label>
+                    <RadioGroupItem value="no" id="no" className="border-slate-500 text-blue-400" />
+                    <Label htmlFor="no" className="cursor-pointer text-slate-200">No</Label>
                   </div>
                 </RadioGroup>
               </div>
 
               {/* Fifth Row - Kilometers (Slider) */}
               <div className="space-y-4">
-                <Label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                   <Gauge className="h-4 w-4" />
                   <span>Kilometers Driven</span>
                 </Label>
@@ -284,9 +287,9 @@ const Index = () => {
                     max={500000}
                     min={0}
                     step={5000}
-                    className="w-full"
+                    className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
                   />
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-slate-300">
                     <span>{formData.kilometers[0].toLocaleString()} km</span>
                     <span>{formData.kilometers[1].toLocaleString()} km</span>
                   </div>
@@ -298,7 +301,7 @@ const Index = () => {
                 <Button
                   type="submit"
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                  className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-12 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                 >
                   Get Price Estimate
                 </Button>
@@ -310,25 +313,25 @@ const Index = () => {
         {/* Features Section */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Gauge className="h-8 w-8 text-blue-600" />
+            <div className="bg-slate-700/50 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border border-slate-600">
+              <Gauge className="h-8 w-8 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Accurate Pricing</h3>
-            <p className="text-gray-600">Get real-time market prices based on current data and trends</p>
+            <h3 className="text-lg font-semibold text-slate-100 mb-2">Accurate Pricing</h3>
+            <p className="text-slate-300">Get real-time market prices based on current data and trends</p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Car className="h-8 w-8 text-blue-600" />
+            <div className="bg-slate-700/50 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border border-slate-600">
+              <Car className="h-8 w-8 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">All Vehicle Types</h3>
-            <p className="text-gray-600">Support for cars, trucks, motorcycles, and commercial vehicles</p>
+            <h3 className="text-lg font-semibold text-slate-100 mb-2">All Vehicle Types</h3>
+            <p className="text-slate-300">Support for cars, trucks, motorcycles, and commercial vehicles</p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Calendar className="h-8 w-8 text-blue-600" />
+            <div className="bg-slate-700/50 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border border-slate-600">
+              <Calendar className="h-8 w-8 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Up-to-Date Data</h3>
-            <p className="text-gray-600">Our database is updated daily with the latest market information</p>
+            <h3 className="text-lg font-semibold text-slate-100 mb-2">Up-to-Date Data</h3>
+            <p className="text-slate-300">Our database is updated daily with the latest market information</p>
           </div>
         </div>
       </div>
