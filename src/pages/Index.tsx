@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Car, Calendar, Fuel, Gauge, DollarSign, Wrench, GitBranch, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -96,23 +97,18 @@ const Index = () => {
   
   const availableModels = formData.make ? carBrands[formData.make as keyof typeof carBrands] || [] : [];
 
-  const renderMultiSelectTrigger = (field: string, items: string[], placeholder: string) => {
-    if (items.length === 0) {
-      return <span className="text-slate-400">{placeholder}</span>;
-    }
+  const renderMultiSelectTags = (field: string, items: string[]) => {
+    if (items.length === 0) return null;
     
     return (
-      <div className="flex flex-wrap gap-1 items-center flex-1 min-w-0">
+      <div className="flex flex-wrap gap-1 mt-2">
         {items.map((item) => (
-          <div key={item} className="flex items-center bg-slate-100 text-slate-900 px-2 py-0.5 rounded text-xs shrink-0">
+          <div key={item} className="flex items-center bg-slate-600 text-slate-100 px-2 py-1 rounded text-xs">
             <span>{item}</span>
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRemoveSelection(field, item);
-              }}
-              className="ml-1 hover:text-red-600"
+              onClick={() => handleRemoveSelection(field, item)}
+              className="ml-1 hover:text-red-400"
             >
               <X className="h-3 w-3" />
             </button>
@@ -253,8 +249,11 @@ const Index = () => {
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
-                        {renderMultiSelectTrigger('engineVolume', formData.engineVolume, "Select engine volumes")}
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.engineVolume.length > 0 
+                          ? `${formData.engineVolume.length} selected`
+                          : "Select engine volumes"
+                        }
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
@@ -270,6 +269,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('engineVolume', formData.engineVolume)}
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
@@ -278,8 +278,11 @@ const Index = () => {
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
-                        {renderMultiSelectTrigger('technicalInspection', formData.technicalInspection, "Select inspection status")}
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.technicalInspection.length > 0 
+                          ? `${formData.technicalInspection.length} selected`
+                          : "Select inspection status"
+                        }
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
@@ -295,6 +298,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('technicalInspection', formData.technicalInspection)}
                 </div>
               </div>
 
@@ -307,8 +311,11 @@ const Index = () => {
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
-                        {renderMultiSelectTrigger('fuelType', formData.fuelType, "Select fuel types")}
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.fuelType.length > 0 
+                          ? `${formData.fuelType.length} selected`
+                          : "Select fuel types"
+                        }
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
@@ -324,6 +331,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('fuelType', formData.fuelType)}
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
@@ -332,8 +340,11 @@ const Index = () => {
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
-                        {renderMultiSelectTrigger('transmissionType', formData.transmissionType, "Select transmission types")}
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.transmissionType.length > 0 
+                          ? `${formData.transmissionType.length} selected`
+                          : "Select transmission types"
+                        }
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
@@ -349,6 +360,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('transmissionType', formData.transmissionType)}
                 </div>
               </div>
 
@@ -365,7 +377,7 @@ const Index = () => {
                     max={200000}
                     min={0}
                     step={1000}
-                    className="w-full [&_.range]:bg-white [&_.track]:bg-slate-600"
+                    className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
                   />
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
@@ -411,7 +423,7 @@ const Index = () => {
                     max={500000}
                     min={0}
                     step={5000}
-                    className="w-full [&_.range]:bg-white [&_.track]:bg-slate-600"
+                    className="w-full [&_[role=slider]]:bg-slate-600 [&_[role=slider]]:border-blue-400"
                   />
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
