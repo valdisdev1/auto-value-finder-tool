@@ -1,12 +1,11 @@
 
 import React, { useState } from 'react';
-import { Car, Calendar, Fuel, Gauge, DollarSign, Wrench, GitBranch } from 'lucide-react';
+import { Car, Calendar, Fuel, Gauge, DollarSign, Wrench, GitBranch, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
@@ -35,12 +34,12 @@ const Index = () => {
     model: '',
     yearFrom: '',
     yearTo: '',
-    engineVolume: '',
+    engineVolume: [] as string[],
     fuelType: [] as string[],
     transmissionType: [] as string[],
     kilometers: [0, 300000],
     priceRange: [0, 100000],
-    technicalInspection: 'any'
+    technicalInspection: [] as string[]
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -56,6 +55,13 @@ const Index = () => {
       [field]: checked 
         ? [...prev[field as keyof typeof prev] as string[], value]
         : (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
+    }));
+  };
+
+  const handleRemoveSelection = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
     }));
   };
 
@@ -90,6 +96,27 @@ const Index = () => {
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
   
   const availableModels = formData.make ? carBrands[formData.make as keyof typeof carBrands] || [] : [];
+
+  const renderMultiSelectTags = (field: string, items: string[]) => {
+    if (items.length === 0) return null;
+    
+    return (
+      <div className="flex flex-wrap gap-1 mt-2">
+        {items.map((item) => (
+          <div key={item} className="flex items-center bg-slate-600 text-slate-100 px-2 py-1 rounded text-xs">
+            <span>{item}</span>
+            <button
+              type="button"
+              onClick={() => handleRemoveSelection(field, item)}
+              className="ml-1 hover:text-red-400"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -127,7 +154,7 @@ const Index = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 bg-slate-800/95">
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* First Row - Make and Model */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -216,43 +243,62 @@ const Index = () => {
               {/* Third Row - Engine Volume and Technical Inspection */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="engineVolume" className="text-sm font-medium text-slate-200 flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Gauge className="h-4 w-4" />
                     <span>Engine Volume (L)</span>
                   </Label>
-                  <Input
-                    id="engineVolume"
-                    placeholder="e.g., 2.0, 3.5, 1.8"
-                    value={formData.engineVolume}
-                    onChange={(e) => handleInputChange('engineVolume', e.target.value)}
-                    className="h-9 text-sm bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-blue-400"
-                    type="number"
-                    step="0.1"
-                  />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.engineVolume.length > 0 
+                          ? `${formData.engineVolume.length} selected`
+                          : "Select engine volumes"
+                        }
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                      {['1.0', '1.2', '1.4', '1.6', '1.8', '2.0', '2.2', '2.4', '2.5', '2.8', '3.0', '3.5', '4.0', '5.0+'].map((volume) => (
+                        <DropdownMenuCheckboxItem
+                          key={volume}
+                          checked={formData.engineVolume.includes(volume)}
+                          onCheckedChange={(checked) => handleMultiSelectChange('engineVolume', volume, checked)}
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600 data-[state=checked]:bg-slate-100 data-[state=checked]:text-slate-900"
+                        >
+                          {volume}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {renderMultiSelectTags('engineVolume', formData.engineVolume)}
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
                     <Wrench className="h-4 w-4" />
                     <span>Yearly Technical Inspection Passed</span>
                   </Label>
-                  <RadioGroup
-                    value={formData.technicalInspection}
-                    onValueChange={(value) => handleInputChange('technicalInspection', value)}
-                    className="flex space-x-4 pt-1"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="any" id="any" className="border-slate-500 text-blue-400" />
-                      <Label htmlFor="any" className="cursor-pointer text-slate-200 text-sm">Any</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="yes" id="yes" className="border-slate-500 text-blue-400" />
-                      <Label htmlFor="yes" className="cursor-pointer text-slate-200 text-sm">Yes</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="no" id="no" className="border-slate-500 text-blue-400" />
-                      <Label htmlFor="no" className="cursor-pointer text-slate-200 text-sm">No</Label>
-                    </div>
-                  </RadioGroup>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50">
+                        {formData.technicalInspection.length > 0 
+                          ? `${formData.technicalInspection.length} selected`
+                          : "Select inspection status"
+                        }
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                      {['Yes', 'No'].map((status) => (
+                        <DropdownMenuCheckboxItem
+                          key={status}
+                          checked={formData.technicalInspection.includes(status)}
+                          onCheckedChange={(checked) => handleMultiSelectChange('technicalInspection', status, checked)}
+                          className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600 data-[state=checked]:bg-slate-100 data-[state=checked]:text-slate-900"
+                        >
+                          {status}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {renderMultiSelectTags('technicalInspection', formData.technicalInspection)}
                 </div>
               </div>
 
@@ -285,6 +331,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('fuelType', formData.fuelType)}
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-slate-200 flex items-center space-x-2">
@@ -313,6 +360,7 @@ const Index = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {renderMultiSelectTags('transmissionType', formData.transmissionType)}
                 </div>
               </div>
 
