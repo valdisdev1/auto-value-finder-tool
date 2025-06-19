@@ -104,7 +104,7 @@ const Index = () => {
     return (
       <div className="flex flex-wrap gap-1 items-center flex-1 min-w-0">
         {items.map((item) => (
-          <div key={item} className="flex items-center bg-slate-100 text-slate-900 px-2 py-0.5 rounded text-xs shrink-0">
+          <div key={item} className="flex items-center bg-blue-100 text-blue-900 px-2 py-0.5 rounded text-xs shrink-0">
             <span>{item}</span>
             <button
               type="button"
@@ -365,7 +365,7 @@ const Index = () => {
                     max={200000}
                     min={0}
                     step={1000}
-                    className="w-full [&_.range]:bg-white [&_.track]:bg-slate-600"
+                    className="w-full"
                   />
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
@@ -411,7 +411,7 @@ const Index = () => {
                     max={500000}
                     min={0}
                     step={5000}
-                    className="w-full [&_.range]:bg-white [&_.track]:bg-slate-600"
+                    className="w-full"
                   />
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
