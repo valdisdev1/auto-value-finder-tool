@@ -370,30 +370,32 @@ const Index = () => {
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-slate-300 min-w-[30px]">From:</span>
-                      <Input
-                        type="number"
-                        value={formData.priceRange[0]}
-                        onChange={(e) => handlePriceRangeInputChange(0, e.target.value)}
-                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
-                        min={0}
-                        max={200000}
-                      />
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          value={formData.priceRange[0]}
+                          onChange={(e) => handlePriceRangeInputChange(0, e.target.value)}
+                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          min={0}
+                          max={200000}
+                        />
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-slate-400">EUR</span>
+                      </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-slate-300 min-w-[20px]">To:</span>
-                      <Input
-                        type="number"
-                        value={formData.priceRange[1]}
-                        onChange={(e) => handlePriceRangeInputChange(1, e.target.value)}
-                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
-                        min={0}
-                        max={200000}
-                      />
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          value={formData.priceRange[1]}
+                          onChange={(e) => handlePriceRangeInputChange(1, e.target.value)}
+                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          min={0}
+                          max={200000}
+                        />
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-slate-400">EUR</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between text-xs text-slate-400">
-                    <span>${formData.priceRange[0].toLocaleString()}</span>
-                    <span>{formData.priceRange[1] >= 200000 ? 'Unlimited' : `$${formData.priceRange[1].toLocaleString()}`}</span>
                   </div>
                 </div>
               </div>
@@ -416,30 +418,32 @@ const Index = () => {
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-slate-300 min-w-[30px]">From:</span>
-                      <Input
-                        type="number"
-                        value={formData.kilometers[0]}
-                        onChange={(e) => handleKilometersInputChange(0, e.target.value)}
-                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
-                        min={0}
-                        max={500000}
-                      />
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          value={formData.kilometers[0]}
+                          onChange={(e) => handleKilometersInputChange(0, e.target.value)}
+                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          min={0}
+                          max={500000}
+                        />
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-slate-400">KM</span>
+                      </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-slate-300 min-w-[20px]">To:</span>
-                      <Input
-                        type="number"
-                        value={formData.kilometers[1]}
-                        onChange={(e) => handleKilometersInputChange(1, e.target.value)}
-                        className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100"
-                        min={0}
-                        max={500000}
-                      />
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          value={formData.kilometers[1]}
+                          onChange={(e) => handleKilometersInputChange(1, e.target.value)}
+                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          min={0}
+                          max={500000}
+                        />
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-slate-400">KM</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between text-xs text-slate-400">
-                    <span>{formData.kilometers[0].toLocaleString()} km</span>
-                    <span>{formData.kilometers[1].toLocaleString()} km</span>
                   </div>
                 </div>
               </div>
