@@ -41,6 +41,13 @@ const Index = () => {
     technicalInspection: [] as string[]
   });
 
+  const [dropdownStates, setDropdownStates] = useState({
+    engineVolume: false,
+    fuelType: false,
+    transmissionType: false,
+    technicalInspection: false
+  });
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -61,6 +68,13 @@ const Index = () => {
     setFormData(prev => ({
       ...prev,
       [field]: (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
+    }));
+  };
+
+  const handleDropdownOpenChange = (field: string, open: boolean) => {
+    setDropdownStates(prev => ({
+      ...prev,
+      [field]: open
     }));
   };
 
@@ -251,13 +265,19 @@ const Index = () => {
                     <Gauge className="h-4 w-4" />
                     <span>Engine Volume (L)</span>
                   </Label>
-                  <DropdownMenu>
+                  <DropdownMenu 
+                    open={dropdownStates.engineVolume} 
+                    onOpenChange={(open) => handleDropdownOpenChange('engineVolume', open)}
+                  >
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
                         {renderMultiSelectTrigger('engineVolume', formData.engineVolume, "Select engine volumes")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                    <DropdownMenuContent 
+                      className="w-full bg-slate-700 border-slate-600 z-50"
+                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, engineVolume: false }))}
+                    >
                       {['1.0', '1.2', '1.4', '1.6', '1.8', '2.0', '2.2', '2.4', '2.5', '2.8', '3.0', '3.5', '4.0', '5.0+'].map((volume) => (
                         <DropdownMenuCheckboxItem
                           key={volume}
@@ -276,13 +296,19 @@ const Index = () => {
                     <Wrench className="h-4 w-4" />
                     <span>Yearly Technical Inspection Passed</span>
                   </Label>
-                  <DropdownMenu>
+                  <DropdownMenu 
+                    open={dropdownStates.technicalInspection} 
+                    onOpenChange={(open) => handleDropdownOpenChange('technicalInspection', open)}
+                  >
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
                         {renderMultiSelectTrigger('technicalInspection', formData.technicalInspection, "Select inspection status")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                    <DropdownMenuContent 
+                      className="w-full bg-slate-700 border-slate-600 z-50"
+                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, technicalInspection: false }))}
+                    >
                       {['Yes', 'No'].map((status) => (
                         <DropdownMenuCheckboxItem
                           key={status}
@@ -305,13 +331,19 @@ const Index = () => {
                     <Fuel className="h-4 w-4" />
                     <span>Fuel Type</span>
                   </Label>
-                  <DropdownMenu>
+                  <DropdownMenu 
+                    open={dropdownStates.fuelType} 
+                    onOpenChange={(open) => handleDropdownOpenChange('fuelType', open)}
+                  >
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
                         {renderMultiSelectTrigger('fuelType', formData.fuelType, "Select fuel types")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                    <DropdownMenuContent 
+                      className="w-full bg-slate-700 border-slate-600 z-50"
+                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, fuelType: false }))}
+                    >
                       {['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((fuel) => (
                         <DropdownMenuCheckboxItem
                           key={fuel}
@@ -330,13 +362,19 @@ const Index = () => {
                     <GitBranch className="h-4 w-4" />
                     <span>Transmission Type</span>
                   </Label>
-                  <DropdownMenu>
+                  <DropdownMenu 
+                    open={dropdownStates.transmissionType} 
+                    onOpenChange={(open) => handleDropdownOpenChange('transmissionType', open)}
+                  >
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
                         {renderMultiSelectTrigger('transmissionType', formData.transmissionType, "Select transmission types")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+                    <DropdownMenuContent 
+                      className="w-full bg-slate-700 border-slate-600 z-50"
+                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, transmissionType: false }))}
+                    >
                       {['Manual', 'Automatic'].map((transmission) => (
                         <DropdownMenuCheckboxItem
                           key={transmission}
@@ -375,7 +413,7 @@ const Index = () => {
                           type="number"
                           value={formData.priceRange[0]}
                           onChange={(e) => handlePriceRangeInputChange(0, e.target.value)}
-                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-10"
                           min={0}
                           max={200000}
                         />
@@ -389,7 +427,7 @@ const Index = () => {
                           type="number"
                           value={formData.priceRange[1]}
                           onChange={(e) => handlePriceRangeInputChange(1, e.target.value)}
-                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-10"
                           min={0}
                           max={200000}
                         />
@@ -423,7 +461,7 @@ const Index = () => {
                           type="number"
                           value={formData.kilometers[0]}
                           onChange={(e) => handleKilometersInputChange(0, e.target.value)}
-                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
                           min={0}
                           max={500000}
                         />
@@ -437,7 +475,7 @@ const Index = () => {
                           type="number"
                           value={formData.kilometers[1]}
                           onChange={(e) => handleKilometersInputChange(1, e.target.value)}
-                          className="h-8 w-24 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
                           min={0}
                           max={500000}
                         />
