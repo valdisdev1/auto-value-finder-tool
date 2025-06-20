@@ -58,8 +58,6 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         className="w-full bg-slate-700 border-slate-600 z-50"
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onFocusOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={() => onOpenChange(false)}
       >
         {options.map((option) => (
