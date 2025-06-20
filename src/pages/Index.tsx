@@ -274,10 +274,7 @@ const Index = () => {
                         {renderMultiSelectTrigger('engineVolume', formData.engineVolume, "Select engine volumes")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      className="w-full bg-slate-700 border-slate-600 z-50"
-                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, engineVolume: false }))}
-                    >
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
                       {['1.0', '1.2', '1.4', '1.6', '1.8', '2.0', '2.2', '2.4', '2.5', '2.8', '3.0', '3.5', '4.0', '5.0+'].map((volume) => (
                         <DropdownMenuCheckboxItem
                           key={volume}
@@ -305,10 +302,7 @@ const Index = () => {
                         {renderMultiSelectTrigger('technicalInspection', formData.technicalInspection, "Select inspection status")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      className="w-full bg-slate-700 border-slate-600 z-50"
-                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, technicalInspection: false }))}
-                    >
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
                       {['Yes', 'No'].map((status) => (
                         <DropdownMenuCheckboxItem
                           key={status}
@@ -340,10 +334,7 @@ const Index = () => {
                         {renderMultiSelectTrigger('fuelType', formData.fuelType, "Select fuel types")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      className="w-full bg-slate-700 border-slate-600 z-50"
-                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, fuelType: false }))}
-                    >
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
                       {['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'LPG'].map((fuel) => (
                         <DropdownMenuCheckboxItem
                           key={fuel}
@@ -371,10 +362,7 @@ const Index = () => {
                         {renderMultiSelectTrigger('transmissionType', formData.transmissionType, "Select transmission types")}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      className="w-full bg-slate-700 border-slate-600 z-50"
-                      onInteractOutside={() => setDropdownStates(prev => ({ ...prev, transmissionType: false }))}
-                    >
+                    <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
                       {['Manual', 'Automatic'].map((transmission) => (
                         <DropdownMenuCheckboxItem
                           key={transmission}
@@ -413,7 +401,7 @@ const Index = () => {
                           type="number"
                           value={formData.priceRange[0]}
                           onChange={(e) => handlePriceRangeInputChange(0, e.target.value)}
-                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-10"
+                          className="h-8 w-40 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-12"
                           min={0}
                           max={200000}
                         />
@@ -427,7 +415,7 @@ const Index = () => {
                           type="number"
                           value={formData.priceRange[1]}
                           onChange={(e) => handlePriceRangeInputChange(1, e.target.value)}
-                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-10"
+                          className="h-8 w-40 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-12"
                           min={0}
                           max={200000}
                         />
@@ -461,7 +449,7 @@ const Index = () => {
                           type="number"
                           value={formData.kilometers[0]}
                           onChange={(e) => handleKilometersInputChange(0, e.target.value)}
-                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-40 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
                           min={0}
                           max={500000}
                         />
@@ -475,7 +463,7 @@ const Index = () => {
                           type="number"
                           value={formData.kilometers[1]}
                           onChange={(e) => handleKilometersInputChange(1, e.target.value)}
-                          className="h-8 w-32 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
+                          className="h-8 w-40 text-xs bg-slate-700/50 border-slate-600 text-slate-100 pr-8"
                           min={0}
                           max={500000}
                         />
