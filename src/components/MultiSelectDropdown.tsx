@@ -50,18 +50,24 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
+    <DropdownMenu open={isOpen} onOpenChange={onOpenChange} modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="h-9 text-sm w-full justify-between bg-slate-700/50 border-slate-600 text-slate-100 hover:bg-slate-600/50 px-3">
           {renderTriggerContent()}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-full bg-slate-700 border-slate-600 z-50">
+      <DropdownMenuContent 
+        className="w-full bg-slate-700 border-slate-600 z-50"
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onFocusOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={() => onOpenChange(false)}
+      >
         {options.map((option) => (
           <DropdownMenuCheckboxItem
             key={option}
             checked={selectedItems.includes(option)}
             onCheckedChange={(checked) => onItemChange(option, checked)}
+            onSelect={(e) => e.preventDefault()}
             className="text-slate-100 hover:bg-slate-600 focus:bg-slate-600 data-[state=checked]:bg-slate-100 data-[state=checked]:text-slate-900"
           >
             {option}

@@ -27,7 +27,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   max,
   step,
   unit,
-  inputWidth = "w-48"
+  inputWidth = "w-32"
 }) => {
   return (
     <div className="space-y-3">

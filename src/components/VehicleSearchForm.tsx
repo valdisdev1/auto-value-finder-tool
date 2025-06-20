@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Car, Calendar, Fuel, Gauge, DollarSign, Wrench, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -284,8 +283,9 @@ const VehicleSearchForm: React.FC = () => {
             onInputChange={handlePriceRangeInputChange}
             min={0}
             max={200000}
-            step={1000}
+            step={100}
             unit="EUR"
+            inputWidth="w-32"
           />
 
           {/* Sixth Row - Kilometers */}
@@ -297,8 +297,9 @@ const VehicleSearchForm: React.FC = () => {
             onInputChange={handleKilometersInputChange}
             min={0}
             max={500000}
-            step={5000}
+            step={1000}
             unit="KM"
+            inputWidth="w-32"
           />
 
           {/* Submit Button */}
